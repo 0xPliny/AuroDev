@@ -1,0 +1,52 @@
+# Build artifacts
+*.exe
+*.dll
+*.pdb
+*.obj
+*.ilk
+*.lib
+*.exp
+*.map
+*.bsc
+*.idb
+*.tlog/
+*.log
+
+# Visual Studio
+.vs/
+bin/
+obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Database
+*.bak
+*.mdf
+*.ldf
+
+# Logs
+Logs/
+*.log
+*.txt
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Archive
+Archive/
+
+# Executables (keep structure but ignore binaries)
+Exec/*.exe
+Exec/*.dll
+Exec/*.pdb
+
+# Keep documentation structure
+!*.md
+!*.xml
+!*.cnf
+!*.msg
+

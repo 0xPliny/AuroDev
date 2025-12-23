@@ -1,0 +1,35 @@
+# AuroDev Cursor Rules
+
+## Project Context
+- **Project:** Auro System (MHC/WCS)
+- **Framework:** MEM (Murata Equipment Manager)
+- **Languages:** C++, VB.NET
+- **Database:** Microsoft SQL Server Standard Edition
+
+## Documentation Reference
+- **MHC-Developers-Guide:** https://github.com/0xPliny/MHC-Developers-Guide
+- **This Documentation:** Project-specific companion to MHC-Developers-Guide
+
+## Source Code Locations
+- **C++ Source:** `D:\ICIS\AuroDev\clogan\AuroDev\MSVC Programs\`
+- **VB.NET Source:** `D:\ICIS\AuroDev\clogan\AuroDev\MSVB Programs\dilg\mhcMenu\`
+- **Executables:** `D:\Auro\Exec\`
+- **Configuration:** `D:\Auro\File\`
+
+## Key Processes
+- Dispatchers: `p_ar_stkdp`, `p_ar_movdp`, `p_ar_agvdp`, `p_ar_rtndp`
+- Completers: `p_ar_srcmp`, `p_ar_agvcp`, `p_ar_rtnxcp`
+- Communications: `p_cc_stkcmx`, `p_cc_mudpcm`, `Kepware_PLC`
+- Auro-Specific: `p_si_AuroHost`, `p_si_AuroTrack`
+
+## Database
+- **Schema Definition:** `D:\Auro\File\database_tables.xml`
+- **Key Tables:** MHC_MOVS, MHC_LOAD, MHC_LOCATION, MHC_INVENTORY
+- **Access:** OSUB API (z_*.vb, z_*.cpp)
+
+## Documentation Standards
+- Follow MHC-Developers-Guide structure
+- Reference generic patterns from MHC-Developers-Guide
+- Document only Auro-specific implementations
+- Include cross-references (minimum 5 per document)
+
