@@ -20,10 +20,10 @@ This directory contains individual file-level documentation for each DSUB (Datab
 | File | Module | Status | Document |
 |------|--------|--------|----------|
 | `ds_movs.md` | `ds_movs` | ✅ Complete | [ds_movs.md](ds_movs.md) |
-| `ds_load.md` | `ds_load` | ❌ Pending | - |
-| `ds_invt.md` | `ds_invt` | ❌ Pending | - |
-| `ds_locn.md` | `ds_locn` | ❌ Pending | - |
-| `ds_get_locn.md` | `ds_get_locn` | ❌ Pending | - |
+| `ds_load.md` | `ds_load` | ✅ Complete | [ds_load.md](ds_load.md) |
+| `ds_invt.md` | `ds_invt` | ✅ Complete | [ds_invt.md](ds_invt.md) |
+| `ds_locn.md` | `ds_locn` | ✅ Complete | [ds_locn.md](ds_locn.md) |
+| `ds_get_locn.md` | `ds_get_locn` | ✅ Complete | [ds_get_locn.md](ds_get_locn.md) |
 
 ---
 
@@ -50,10 +50,10 @@ This directory contains individual file-level documentation for each DSUB (Datab
 
 | Category | Total | Documented | Pending | Progress |
 |----------|-------|------------|---------|----------|
-| Priority 1 | 5 | 1 | 4 | 20% |
+| Priority 1 | 5 | 5 | 0 | **100%** ✅ |
 | Priority 2 | 1 | 0 | 1 | 0% |
 | Priority 3 | 4 | 0 | 4 | 0% |
-| **Total** | **10** | **1** | **9** | **10%** |
+| **Total** | **10** | **5** | **5** | **50%** |
 
 ---
 
