@@ -30,8 +30,8 @@ This directory contains individual file-level documentation for each CCSUB (Comm
 
 | File | Class | Status | Document |
 |------|-------|--------|----------|
-| `cc_mudp.md` | `cc_mudp` | ❌ Pending | - |
-| `cc_coms.md` | `cc_coms` | ❌ Pending | - |
+| `cc_mudp.md` | `cc_mudp` | ✅ Complete | [cc_mudp.md](cc_mudp.md) |
+| `cc_coms.md` | `cc_coms` | ✅ Complete | [cc_coms.md](cc_coms.md) |
 
 ---
 
@@ -62,10 +62,10 @@ This directory contains individual file-level documentation for each CCSUB (Comm
 | Category | Total | Documented | Pending | Progress |
 |----------|-------|------------|---------|----------|
 | Priority 1 | 4 | 4 | 0 | **100%** ✅ |
-| Priority 2 | 2 | 0 | 2 | 0% |
+| Priority 2 | 2 | 2 | 0 | **100%** ✅ |
 | Priority 3 | 4 | 0 | 4 | 0% |
 | Priority 4 | 4 | 0 | 4 | 0% |
-| **Total** | **14** | **1** | **13** | **7%** |
+| **Total** | **14** | **6** | **8** | **43%** |
 
 ---
 
