@@ -39,12 +39,12 @@ This directory contains individual file-level documentation for each CSUB (Commo
 
 | File | Module | Status | Document |
 |------|--------|--------|----------|
-| `cs_cch.md` | `cs_cch` | ❌ Pending | - |
-| `cs_mpm.md` | `cs_mpm` | ❌ Pending | - |
-| `cs_tmr.md` | `cs_tmr` | ❌ Pending | - |
-| `cs_txt.md` | `cs_txt` | ❌ Pending | - |
-| `cs_sem.md` | `cs_sem` | ❌ Pending | - |
-| `cs_seq.md` | `cs_seq` | ❌ Pending | - |
+| `cs_cch.md` | `cs_cch` | ✅ Complete | [cs_cch.md](cs_cch.md) |
+| `cs_mpm.md` | `cs_mpm` | ✅ Complete | [cs_mpm.md](cs_mpm.md) |
+| `cs_tmr.md` | `cs_tmr` | ✅ Complete | [cs_tmr.md](cs_tmr.md) |
+| `cs_txt.md` | `cs_txt` | ✅ Complete | [cs_txt.md](cs_txt.md) |
+| `cs_sem.md` | `cs_sem` | ✅ Complete | [cs_sem.md](cs_sem.md) |
+| `cs_seq.md` | `cs_seq` | ✅ Complete | [cs_seq.md](cs_seq.md) |
 
 ---
 
@@ -54,8 +54,8 @@ This directory contains individual file-level documentation for each CSUB (Commo
 |----------|-------|------------|---------|----------|
 | Priority 1 | 4 | 4 | 0 | **100%** ✅ |
 | Priority 2 | 2 | 2 | 0 | **100%** ✅ |
-| Priority 3 | 6 | 0 | 6 | 0% |
-| **Total** | **12** | **6** | **6** | **50%** |
+| Priority 3 | 6 | 6 | 0 | **100%** ✅ |
+| **Total** | **12** | **12** | **0** | **100%** ✅ |
 
 ---
 
