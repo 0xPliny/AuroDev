@@ -20,9 +20,9 @@ This directory contains individual file-level documentation for each CSUB (Commo
 | File | Module | Status | Document |
 |------|--------|--------|----------|
 | `cs_log_printf.md` | `cs_log` | ✅ Complete | [cs_log_printf.md](cs_log_printf.md) |
-| `cs_msg.md` | `cs_msg` | ❌ Pending | - |
-| `cs_reg.md` | `cs_reg` | ❌ Pending | - |
-| `cs_dtm.md` | `cs_dtm` | ❌ Pending | - |
+| `cs_msg.md` | `cs_msg` | ✅ Complete | [cs_msg.md](cs_msg.md) |
+| `cs_reg.md` | `cs_reg` | ✅ Complete | [cs_reg.md](cs_reg.md) |
+| `cs_dtm.md` | `cs_dtm` | ✅ Complete | [cs_dtm.md](cs_dtm.md) |
 
 ---
 
@@ -52,10 +52,10 @@ This directory contains individual file-level documentation for each CSUB (Commo
 
 | Category | Total | Documented | Pending | Progress |
 |----------|-------|------------|---------|----------|
-| Priority 1 | 4 | 1 | 3 | 25% |
+| Priority 1 | 4 | 4 | 0 | **100%** ✅ |
 | Priority 2 | 2 | 0 | 2 | 0% |
 | Priority 3 | 6 | 0 | 6 | 0% |
-| **Total** | **12** | **1** | **11** | **8%** |
+| **Total** | **12** | **4** | **8** | **33%** |
 
 ---
 
