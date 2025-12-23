@@ -1,10 +1,44 @@
 # CSUB - Common Subroutines
 
+**Document Version:** 2.0  
+**Last Updated:** 2024-12-23  
+**Author:** CmL  
+**Confidence Score:** 0.95
+
 **Source Location:** 
 - `D:\ICIS\AuroDev\clogan\AuroDev\MSVC Programs\csub`
 - `D:\ICIS\AuroDev\clogan\AuroDev\Base\trunk\MSVC Programs\ccsub` (Mixed with CCSUB)
 
 **Description:** CSUB (Common Subroutines) provides fundamental utility functions used throughout the MHC/MEM system. These include logging, messaging, registry access, date/time handling, and other common operations.
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      Application Layer                          │
+│    (Background Processes, UI Dialogs, Communication Services)   │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        CSUB Layer                               │
+│  ┌─────────────┐  ┌─────────────┐  ┌────────────────────────┐   │
+│  │  Logging    │  │ Messaging   │  │ Configuration Access   │   │
+│  │  (cs_log)   │  │ (cs_msg)    │  │ (cs_elt, cs_reg, cs_cnf)│  │
+│  └─────────────┘  └─────────────┘  └────────────────────────┘   │
+│  ┌─────────────┐  ┌─────────────┐  ┌────────────────────────┐   │
+│  │ Date/Time   │  │  Semaphores │  │  Text Translation      │   │
+│  │ (cs_dtm)    │  │  (cs_sem)   │  │  (cs_txt)              │   │
+│  └─────────────┘  └─────────────┘  └────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│              Operating System / File System Layer               │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -568,7 +602,28 @@ See source files for:
 
 ## Related Documentation
 
-- CCSUB: `ccsub.md` for control classes
-- OSUB: `osub.md` for database access
-- Configuration Files: See configuration documentation
+- [CCSUB Library](ccsub.md) - Control classes
+- [DSUB Library](dsub.md) - Database subroutines
+- [OSUB Library](osub.md) - VB.NET database access
+- [global_prm.h Reference](global_prm.md)
+- [Configuration Files](../../06_Configuration/00_Configuration_Overview.md)
 
+---
+
+## Cross-References
+
+| Topic | Document | Section |
+|-------|----------|---------|
+| Control Classes | [CCSUB Library](ccsub.md) | Equipment control |
+| Database Access | [DSUB Library](dsub.md) | SQL operations |
+| Process Initialization | [p_ar_movdp](../01_Background_Processes/p_ar_movdp.md) | Uses cs_init |
+| Logging Setup | [Quick Start Guide](../../00_Quick_Start_Guide.md) | Configuration |
+
+---
+
+## Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 2.0 | 2024-12-23 | Added architecture diagram and cross-references |
+| 1.0 | 2024-12-22 | Initial creation |

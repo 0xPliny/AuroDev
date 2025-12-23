@@ -56,6 +56,30 @@ Fundamental utility functions used throughout the MHC/MEM system including loggi
 
 ---
 
+### [DSUB - Database Subroutines](dsub.md)
+
+**Source:** `D:\ICIS\AuroDev\clogan\AuroDev\MSVC Programs\dsub`
+
+Core database access layer providing SQL Server connectivity, transaction management, and specialized business logic functions for the C++ codebase.
+
+**Key Components:**
+- `ds_sql.*` - SQL connection and transaction management
+- `ds_movs.*` - Move record operations
+- `ds_stand.*` - Stand (station) operations
+- `ds_sr.*` - Stacker database operations
+- `ds_group.*` - Routing group management
+- `ds_get_*.*` - Specialized data retrieval (30+ getter functions)
+- `ds_hostout.*` - Host communication message generation
+- `ds_exec.*` - Stored procedure execution
+
+**Key Features:**
+- Global `SQL` class for all database operations
+- Deadlock priority system (PEON to SAURON)
+- Transaction control (READ_ONLY, READ_WRITE)
+- ~60 files covering complete database layer
+
+---
+
 ## Constants and Definitions
 
 ### [ICISDefines.vb - VB.NET Constants](ICISDefines.md)
@@ -171,13 +195,31 @@ Central header file containing system-wide constants, type definitions, macros, 
 
 ---
 
+## Library Relationships
+
+### [SUB Library Relationships](SUB_Library_Relationships.md)
+
+Comprehensive documentation of the dependencies, data flows, and integration patterns between all SUB libraries.
+
+**Key Topics:**
+- Dependency Matrix (what uses what)
+- Architecture Diagrams (Mermaid flowcharts)
+- Data Flow Patterns (Move processing, Equipment status)
+- Function Call Patterns (VB.NET, C++, Cross-library)
+- Key Integration Points (String ops, Constants sync, Transactions)
+- Build Order Dependencies
+
+---
+
 ## Related Documentation
 
-- [OSUB Detailed Reference](osub.md) - Database access patterns
+- [OSUB Detailed Reference](osub.md) - VB.NET database access (generated classes)
 - [CCSUB Detailed Reference](ccsub.md) - Equipment control classes
 - [CSUB Detailed Reference](csub.md) - Utility functions
+- [DSUB Detailed Reference](dsub.md) - C++ database subroutines
 - [ICISDefines Complete Reference](ICISDefines.md) - All VB.NET constants
 - [global_prm.h Complete Reference](global_prm.md) - All C++ constants
+- [SUB Library Relationships](SUB_Library_Relationships.md) - Inter-library dependencies
 
 ---
 

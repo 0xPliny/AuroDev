@@ -1,437 +1,739 @@
-# CCSUB - Common Control Subroutines
+# CCSUB Library - Common Control Subroutines
 
-**Source Location:** `D:\ICIS\AuroDev\clogan\AuroDev\Base\trunk\MSVC Programs\ccsub`
-
-**Description:** CCSUB (Common Control Subroutines) provides C++ classes for equipment control, communication, and system management. These classes encapsulate device-specific logic for stackers, vehicles, PLCs, and other equipment types.
+**Document Version:** 2.0  
+**Last Updated:** 2024-12-23  
+**Author:** CmL  
+**Confidence Score:** 0.95
 
 ---
 
 ## Overview
 
-CCSUB classes follow an object-oriented design pattern with static class instances. Key classes include:
-- `cc_stk`: Stacker crane control
-- `cc_vehicle`: AGV/RTNX vehicle control  
-- `cc_mudp`: MUDP protocol communication
-- `cc_plc`: PLC communication abstraction
-- `cc_str`: String manipulation utilities
-- `cc_sys`: System-level control
-- `cc_mem`: Mapped memory management
+CCSUB (Common Control Subroutines) is the **core equipment control library** for the MHC/MEM system. It provides C++ classes for equipment control, communication, shared memory management, and utility functions. CCSUB classes are mapped to shared memory, allowing multiple processes to access equipment state simultaneously.
+
+**Location:** `D:\ICIS\AuroDev\clogan\AuroDev\Base\trunk\MSVC Programs\ccsub\`
 
 ---
 
-## cc_str - String Manipulation Class
+## Architecture
 
-**Source:** `cc_str.h`, `cc_str.cpp`
-
-**Description:** Provides safe string manipulation functions to replace standard C library functions. All functions include buffer size checking to prevent overflows.
-
-**Class Instance:** `cc_str` (global static instance)
-
-### `cc_str.copy`
-
-**Signature:**
-```cpp
-char *copy(char *to_str, size_t sizeInBytes, const char *from_str)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                  Background Processes Layer                     │
+│    (Dispatchers, Completers, Communications, Utilities)         │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        CCSUB Layer                              │
+│  ┌──────────────────────┐  ┌──────────────────────────────────┐ │
+│  │  Control Classes     │  │  Utility Functions               │ │
+│  │  (cc_stk, cc_std,   │  │  (cs_log, cs_msg, cs_reg,       │ │
+│  │   cc_zone, cc_agv,   │  │   cs_dtm, cs_err, cs_elt...)   │ │
+│  │   cc_rtn, cc_plc...) │  │                                  │ │
+│  └──────────────────────┘  └──────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Mapped Memory Layer                          │
+│               (Shared Memory Files - .shm)                      │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-**Description:**
-Safely copies a string from source to destination with buffer size checking. Equivalent to `strncpy` but safer.
+---
 
-**Parameters:**
-- `to_str` (char*): Destination buffer
-- `sizeInBytes` (size_t): Size of destination buffer in bytes
-- `from_str` (const char*): Source string to copy
+## Control Classes (cc_*)
 
-**Return Values:**
-- Returns pointer to `to_str` on success
-- Always null-terminates the destination string
+### 1. cc_stk - Stacker Crane Class
 
-**Logic Flow:**
-1. Copies characters from source to destination
-2. Ensures destination is null-terminated
-3. Respects buffer size limits
+**Files:** `cc_stk.h`, `cc_stk.cpp`
 
-**Dependencies:**
-- Standard C library: `memcpy`, `strlen`
+The `cc_stacker` class manages stacker crane state, communication, and operations.
 
-**Usage Example:**
+#### Class Definition
 ```cpp
-char basketId[BASKET_ID_LEN];
-cc_str.copy(basketId, sizeof(basketId), sourceBasketId);
+class cc_stacker {
+public:
+    // Constructor
+    cc_stacker();
+    cc_stacker(cc_stacker* srP);
+    
+    // Identity
+    long    aisle();                    // Aisle number
+    char*   name();                     // Stacker name (e.g., "SR01")
+    char*   long_name();                // Long display name
+    
+    // Status Properties
+    long    comm();                     // Communication status
+    long    enabled();                  // Enabled flag
+    long    error_code();               // Current error code
+    long    error_sub_code();           // Error sub-code
+    long    func();                     // Current function
+    long    hard();                     // Hardware status
+    long    mode();                     // Operating mode
+    long    schd();                     // Schedule status
+    long    soft();                     // Software status
+    
+    // Position
+    long    bay();                      // Current bay
+    long    level();                    // Current level
+    
+    // Fork Operations (MUDP)
+    long    forks();                    // Number of forks
+    char*   loadid(long fork);          // Load ID on fork
+    long    loaded(long fork);          // Fork loaded status
+    long    func_step(long fork);       // Current step for fork
+    long    fork_need_next_step(long fork);  // Needs next step
+    long    fork_need_same_step(long fork);  // Needs same step repeated
+    
+    // Configuration
+    long    double_deep();              // Double-deep capability
+    long    space_storage();            // Space storage crane
+    long    Use_BCR();                  // BCR usage flag
+};
+
+// Global stacker control
+cc_stk_ctrl cc_stacker_ctrl;
 ```
 
-**Source Files:**
-- `cc_str.h` (line 45)
-- `cc_str.cpp` (implementation)
-
----
-
-### `cc_str.comp`
-
-**Signature:**
+#### Stacker Finder Methods
 ```cpp
-long comp(const char *s1, const char *s2)
+cc_stacker* cc_stk_ctrl::Find_Stk(const char* name);     // By name
+cc_stacker* cc_stk_ctrl::Find_Stk(const long aisle);     // By aisle
+cc_stacker* cc_stk_ctrl::Find_Stk_Idx(const long idx);   // By index
+cc_stacker* cc_stk_ctrl::Find_Stk_Next(cc_stacker* SR);  // Next stacker
 ```
 
-**Description:**
-Compares two strings. Equivalent to `strcmp` but returns MHC standard return codes.
+---
 
-**Parameters:**
-- `s1` (const char*): First string
-- `s2` (const char*): Second string
+### 2. cc_std - Stand (Station) Class
 
-**Return Values:**
-- `GP_MATCH` (0): Strings are equal
-- Non-zero: Strings differ
+**Files:** `cc_std.h`, `cc_std.cpp`
 
-**Dependencies:**
-- Standard C library: `strcmp`
+The `cc_stand` class manages stations, buffers, and conveyor positions.
 
-**Usage Example:**
+#### Class Definition
 ```cpp
-if (cc_str.comp(status, "ACTIVE") == GP_MATCH) {
-    // Status is active
-}
+class cc_stand {
+public:
+    // Constructor
+    cc_stand();
+    cc_stand(cc_stand* stP);
+    
+    // Identity
+    char*   name();                     // Stand name
+    char*   station_name();             // Display name
+    char*   description();              // Description
+    long    type();                     // Stand type (see GP.ST.TYP)
+    
+    // Position
+    long    aisle();                    // Aisle number
+    long    bay();                      // Bay number
+    long    level();                    // Level number
+    long    zone();                     // Zone number
+    
+    // Status
+    long    available();                // Available for use
+    long    enabled();                  // Enabled flag
+    long    errorflag();                // Error flag
+    long    errorno();                  // Error number
+    long    hard();                     // Hardware status
+    long    loaded();                   // Load present
+    long    loaded2();                  // Second load (dual position)
+    long    soft();                     // Software status
+    
+    // Mode
+    long    mode_current();             // Current mode
+    long    mode_next();                // Next mode
+    long    stor_mode();                // Store mode (STOR/RTRV/BOTH/NONE)
+    long    rtrv_mode();                // Retrieve mode
+    
+    // Load Information
+    char*   loadid();                   // Current load ID
+    char*   loadid2();                  // Second load ID
+    long    load_size();                // Load size
+    
+    // Relationships
+    char*   stacker_name();             // Associated stacker
+    char*   plc_name();                 // Associated PLC
+    char*   next_station();             // Next station in route
+    char*   xref_stand();               // Cross-reference stand
+    
+    // Actions
+    char*   action_sr_comp();           // Action on SR complete
+    char*   action_movdp_assign();      // Action on move assign
+    char*   action_conv_comp();         // Action on conveyor complete
+};
+
+// Global stand control
+cc_std_ctrl cc_stand_ctrl;
 ```
 
-**Source Files:**
-- `cc_str.h` (line 39)
-- `cc_str.cpp` (implementation)
+#### Stand Types (GP.ST.TYP)
+| Value | Constant | Description |
+|-------|----------|-------------|
+| 1 | `PDIN` | Pickup/Dropoff Input |
+| 2 | `PDOUT` | Pickup/Dropoff Output |
+| 3 | `INFED` | Infeed station |
+| 4 | `OUTFD` | Outfeed station |
+| 5 | `DIVRT` | Divert station |
+| 6 | `MERGE` | Merge station |
+| 7 | `SRBC` | Stacker BCR |
+| 8 | `PDBUF` | PD Buffer |
+| 9 | `ACCUM` | Accumulation conveyor |
+| 10 | `OTHER` | Other type |
 
 ---
 
-### `cc_str.concat`
+### 3. cc_zone - Zone Class
 
-**Signature:**
+**Files:** `cc_zone.h`, `cc_zone.cpp`
+
+The `cc_zone` class manages tracking zones for conveyor movement.
+
+#### Class Definition
 ```cpp
-char *concat(char *to, size_t sizeInBytes, const char *from)
+class cc_zone {
+public:
+    // Constructor
+    cc_zone();
+    cc_zone(cc_zone* zP, char* prefix);
+    
+    // Identity
+    long    zone();                     // Zone number
+    char*   zone_name();                // Zone name
+    char*   plc_name();                 // Associated PLC
+    char*   area();                     // System area
+    
+    // Load Tracking
+    char*   loadid();                   // Current load ID
+    char*   loadid(const long idx);     // Load by index (0=Current, 1=Coming)
+    long    destination();              // Destination zone
+    long    loaded();                   // Zone is loaded
+    
+    // BCR Data
+    char*   loadid_1();                 // BCR read #1
+    char*   loadid_2();                 // BCR read #2
+    char*   loadid_3();                 // BCR read #3
+    double  weight();                   // Weight scale reading
+    char*   profil();                   // Profile data
+    
+    // Configuration
+    long    group();                    // Group number
+    long    drag_zone();                // Linked drag zone
+    bool    real();                     // Real zone flag
+    bool    simulated();                // Simulated zone
+    bool    weigh_scale();              // Has weight scale
+    long    Bar_Code_Scan();            // BCR scan type
+    
+    // Control
+    bool    ok();                       // Zone is OK to move
+    bool    empty();                    // Zone is empty
+    void    sem_lock();                 // Lock tracking semaphore
+    void    sem_unlock();               // Unlock semaphore
+};
+
+// Zone control class
+class cc_zone_ctrl {
+public:
+    cc_zone*    Find_Zone(const long zone_name);
+    cc_zone*    Find_Zone(cc_zone* ZONE);
+    long        zone_add(const long zone, const char* loadid, const long dest);
+    long        zone_delete(const long zone);
+    long        zone_move(const long from, const long to);
+    bool        zone_empty(const long zone);
+    bool        zone_ok(const long zone);
+};
+
+// Global zone control
+cc_zone_ctrl cc_ZONE;
 ```
 
-**Description:**
-Safely concatenates a string to the end of another string with buffer size checking. Equivalent to `strncat` but safer.
+---
 
-**Parameters:**
-- `to` (char*): Destination buffer (must be null-terminated)
-- `sizeInBytes` (size_t): Size of destination buffer
-- `from` (const char*): Source string to append
+### 4. cc_agv - AGV Class
 
-**Return Values:**
-- Returns pointer to `to` on success
-- Always null-terminates the result
+**Files:** `cc_agv.h`, `cc_agv.cpp`
 
-**Dependencies:**
-- Standard C library: `strlen`, `strncat`
+Manages Automatic Guided Vehicles.
 
-**Usage Example:**
+#### Class Definition
 ```cpp
-char message[256];
-cc_str.copy(message, sizeof(message), "Error: ");
-cc_str.concat(message, sizeof(message), errorText);
+class cc_agvs {
+public:
+    // Operation Modes
+    class OperMode {
+        enum opermode { MAINTENANCE, MANUAL, LOCAL, AUTO, ERR = 9 };
+    };
+    
+    // Vehicle Modes
+    class VehicleMode {
+        enum vehiclemodes { ONLINE, OFFLINE };
+    };
+    
+    // Properties
+    long    number();                   // AGV number
+    char*   short_name();               // Short name
+    char*   long_name();                // Long name
+    long    point_no();                 // Current point
+    long    loop();                     // Loop number
+    
+    // Status
+    long    error();                    // Error code
+    bool    loaded();                   // AGV is loaded
+    char*   loadid();                   // Load ID on AGV
+    char*   loadid_assigned();          // Assigned load ID
+    long    oper_mode();                // Operation mode
+    long    vehicle_mode();             // Vehicle mode
+    long    ok();                       // OK to assign work
+    
+    // Simulation
+    bool    sim();                      // Simulator mode
+    long    SimuAction();               // Simulation action
+    double  Simu_timer();               // Simulation timer
+};
+
+// Global AGV control
+cc_agv_ctrl cc_agv;
 ```
 
-**Source Files:**
-- `cc_str.h` (line 48)
-- `cc_str.cpp` (implementation)
-
 ---
 
-### `cc_str.set`
+### 5. cc_rtn - RTNX Cart Class
 
-**Signature:**
+**Files:** `cc_rtnx.h`, `cc_rtnx.cpp`
+
+Manages Rail-guided Transport (RTNX) carts.
+
+#### Class Definition
 ```cpp
-char *set(char *str, char ch, long count)
+class cc_rtns {
+public:
+    // Cart Modes
+    class CartMode {
+        enum cartmode { AUTOOFF, AUTOON, ERR };
+    };
+    
+    // Cart States
+    class CartState {
+        enum cartstates { OFFLINE, ONLINE };
+    };
+    
+    // Properties
+    long    number();                   // RTNX number
+    char*   short_name();               // Short name
+    char*   long_name();                // Long name
+    long    point_no();                 // Current point
+    long    loop();                     // Loop/floor number
+    
+    // Status
+    long    error();                    // Error code
+    bool    loaded();                   // RTNX is loaded
+    char*   loadid();                   // Load ID
+    long    cart_mode();                // Cart mode
+    long    cart_state();               // Cart state
+    bool    controller();               // Is controller
+};
+
+// Global RTNX control
+cc_rtn_ctrl cc_rtn;
 ```
 
-**Description:**
-Sets a string buffer to a specific character for a specified count. Useful for initializing buffers.
+---
 
-**Parameters:**
-- `str` (char*): String buffer to set
-- `ch` (char): Character to fill with
-- `count` (long): Number of characters to set
+### 6. cc_plc - PLC Class
 
-**Return Values:**
-- Returns pointer to `str`
+**Files:** `cc_plc.h`, `cc_plc.cpp`
 
-**Usage Example:**
+Manages PLC communication and I/O points.
+
+#### Class Definition
 ```cpp
-char buffer[100];
-cc_str.set(buffer, ' ', 100);  // Fill with spaces
-buffer[99] = '\0';  // Null terminate
+class cc_plc {
+public:
+    // Identity
+    char*   name();                     // PLC name
+    long    number();                   // PLC number
+    
+    // Communication
+    long    comm();                     // Communication status
+    bool    enabled();                  // Enabled flag
+    
+    // I/O Access
+    long    read_bit(const char* bit_name);
+    void    write_bit(const char* bit_name, long value);
+    long    read_register(const char* reg_name);
+    void    write_register(const char* reg_name, long value);
+    
+    // Finder
+    static cc_plc* get_plc(const char* name);
+};
 ```
 
-**Source Files:**
-- `cc_str.h` (line 54)
-- `cc_str.cpp` (implementation)
-
 ---
 
-### `cc_str.isblank`
+### 7. cc_mem - Memory Management Class
 
-**Signature:**
+**Files:** `cc_mem.h`, `cc_mem.cpp`
+
+Manages mapped memory (shared memory files).
+
+#### Class Definition
 ```cpp
-GP_BOOL isblank(const char *str)
+class cc_mem {
+public:
+    // Memory Operations
+    void*   attach(const char* name, size_t size);
+    void    detach(void* ptr);
+    void    flush(void* ptr, size_t size);
+    
+    // File Management
+    long    create(const char* filename, size_t size);
+    long    open(const char* filename);
+    void    close();
+};
 ```
 
-**Description:**
-Checks if a string is blank (empty or contains only whitespace).
+---
 
-**Parameters:**
-- `str` (const char*): String to check
+### 8. cc_str - String Operations Class
 
-**Return Values:**
-- `TRUE` (1): String is blank
-- `FALSE` (0): String contains non-whitespace characters
+**Files:** `cc_str.h`, `cc_str.cpp`
 
-**Usage Example:**
+**CRITICAL:** Must use `cc_str` for all string operations (not C library functions).
+
+#### Class Definition
 ```cpp
-if (cc_str.isblank(userInput)) {
-    cs_log_printf(FILELINE, CS_LOG_ERROR, "User input is blank");
-    return GP.BAD;
-}
+static class cc_str_class {
+public:
+    // Copy operations
+    void    copy(char* dest, const char* src, size_t destSize);
+    void    copy(char* dest, size_t destSize, const char* src);
+    
+    // Compare operations
+    int     comp(const char* str1, const char* str2);
+    int     comp(const char* str1, const char* str2, size_t len);
+    
+    // Concatenation
+    void    cat(char* dest, const char* src, size_t destSize);
+    void    concat(char* dest, size_t destSize, const char* src);
+    
+    // Trim operations
+    void    trim(char* str);
+    void    rtrim(char* str);
+    void    ltrim(char* str);
+    
+    // Case operations
+    void    upper(char* str);
+    void    lower(char* str);
+} cc_str;
 ```
 
-**Source Files:**
-- `cc_str.h` (line 65)
-- cc_str.cpp (implementation)
-
----
-
-### `cc_str.upper` / `cc_str.lower`
-
-**Signature:**
+#### Usage Pattern
 ```cpp
-char *upper(char *str)
-char *lower(char *str)
+// CORRECT - Use cc_str
+char buffer[50];
+cc_str.copy(buffer, sourceStr, sizeof(buffer));
+
+// FORBIDDEN - Never use C library
+// strcpy(buffer, sourceStr);  // NEVER!
 ```
 
-**Description:**
-Converts a string to uppercase or lowercase in place.
+---
 
-**Parameters:**
-- `str` (char*): String to convert (modified in place)
+### 9. cc_gg - Global Variables Class
 
-**Return Values:**
-- Returns pointer to `str`
+**Files:** `cc_gg.h`, `cc_gg.cpp`
 
-**Dependencies:**
-- Standard C library: `toupper`, `tolower`
+Global variables and program information.
 
-**Usage Example:**
+#### Class Definition
 ```cpp
-char status[20];
-cc_str.copy(status, sizeof(status), "pending");
-cc_str.upper(status);  // Now "PENDING"
+static class cc_gg_class {
+public:
+    // Program Info
+    char*   prgnam();                   // Program name
+    long    prgpid();                   // Process ID
+    char*   area();                     // System area
+    
+    // Database Functions
+    char*   dbfuncs();                  // Current DB function
+    void    set_dbfuncs(const char* name);
+    
+    // Error State
+    long    error();
+    void    set_error(long code);
+} gg;
+
+// Global text buffers
+extern char gg_text[256];
+extern char gg_text2[256];
+extern char gg_text3[512];
+extern char gg_text4[1024];
+extern char gg_text5[2048];
 ```
 
-**Source Files:**
-- `cc_str.h` (lines 78-79)
-- `cc_str.cpp` (implementation)
+---
+
+### 10. cc_sys - System Control Class
+
+**Files:** `cc_sys.h`, `cc_sys.cpp`
+
+System-level control and initialization.
 
 ---
 
-### `cc_str.atoi`
+### 11. cc_sts - Statistics Class
 
-**Signature:**
+**Files:** `cc_sts.h`, `cc_sts.cpp`
+
+Equipment statistics tracking.
+
+---
+
+### 12. cc_vehicle - Vehicle Base Class
+
+**Files:** `cc_vehicle.h`, `cc_vehicle.cpp`
+
+Base class for AGV and RTNX vehicles.
+
+---
+
+### 13. cc_mudp - MUDP Protocol Class
+
+**Files:** `cc_mudp.h`, `cc_mudp.cpp`
+
+MUDP (Murata UDP) communication protocol implementation.
+
+---
+
+### 14. cc_route - Routing Class
+
+**Files:** `cc_route.h`, `cc_route.cpp`
+
+Load routing logic and path finding.
+
+---
+
+### 15. cc_common - Common Utilities
+
+**Files:** `cc_common.h`, `cc_common.cpp`
+
+Common utility functions and structures.
+
+---
+
+## Utility Functions (cs_*)
+
+### 1. cs_log - Logging Functions
+
+**Files:** `CS_LOG.Cpp`, `CS_LOG.H`
+
+#### Key Functions
 ```cpp
-long atoi(char *in_ptr, long length)
+// Standard logging
+void cs_log_printf(const char* prgnam, int level, const char* format, ...);
+void cs_log_printf(int level, const char* format, ...);
+
+// Log levels: 0-2 Errors, 3-4 Standard, 5-6 Verbose, 7-10 Trace
 ```
 
-**Description:**
-Converts a string to an integer, reading only the specified number of characters.
-
-**Parameters:**
-- `in_ptr` (char*): String to convert
-- `length` (long): Number of characters to read
-
-**Return Values:**
-- Integer value of the string
-
-**Dependencies:**
-- Standard C library: `atol`, `memcpy`
-
-**Usage Example:**
+#### Usage Pattern
 ```cpp
-char numStr[10] = "12345";
-long value = cc_str.atoi(numStr, 5);  // Returns 12345
+cs_log_printf(gg.prgnam(), 3, "HstCm: Processing basket [%s], rc=%d", 
+              basketId, rc);
+              
+// Error logging
+cs_log_printf(gg.prgnam(), 0, "HstCm: ERROR - Failed to connect, rc=%d", rc);
 ```
 
-**Source Files:**
-- `cc_str.h` (line 83)
-- `cc_str.cpp` (lines 67-88)
+---
+
+### 2. cs_msg - Message Queue Functions
+
+**Files:** `cs_msg.cpp`, `CS_MSG.H`
+
+#### Key Functions
+```cpp
+long cs_msg_put(const char* queue, void* msg, size_t size);
+long cs_msg_get(const char* queue, void* msg, size_t size);
+long cs_msg_peek(const char* queue, void* msg, size_t size);
+long cs_msg_count(const char* queue);
+```
 
 ---
 
-### Additional cc_str Functions
+### 3. cs_reg - Registry Functions
 
-See `cc_str.h` for complete function list including:
-- `ncomp`: Compare with length
-- `ncopy`: Copy with length
-- `token`: String tokenization
-- `clip`: Remove trailing spaces
-- `findpat`: Find pattern in string
-- `replace`: Replace characters/strings
-- `isnumeric`: Check if string is numeric
-- `sanitize`: Sanitize input strings
-- `sqlSafetyCleanUp`: SQL injection prevention
+**Files:** `cs_reg.cpp`, `cs_reg.h`
 
----
+#### Key Functions
+```cpp
+// Read registry values
+long cs_reg_read(const char* section, const char* key, char* value, size_t size);
+long cs_reg_read(const char* section, const char* key, long* value, long default_val);
 
-## cc_stk - Stacker Crane Control Class
-
-**Source:** `cc_stk.h`, `cc_stk.cpp`
-
-**Description:** Provides control and status management for stacker crane devices. Manages communication, scheduling, functions, and error handling for stackers.
-
-**Key Properties:**
-- Communication status (`comm`)
-- Schedule status (`schedule`)
-- Current function (`func`)
-- Control function (`func_ctrl`)
-- Error codes and status
-- Fork cycle completion tracking
-- Multi-step operation support
-
-**Usage:**
-Stacker crane control is typically accessed through mapped memory structures. The `cc_stk` class provides methods to read/write stacker properties and manage crane operations.
-
-**Source Files:**
-- `cc_stk.h` (lines 1-941)
-- `cc_stk.cpp` (implementation)
+// Write registry values
+long cs_reg_write(const char* section, const char* key, const char* value);
+long cs_reg_write(const char* section, const char* key, long value);
+```
 
 ---
 
-## cc_vehicle - Vehicle Control Class
+### 4. cs_dtm - Date/Time Functions
 
-**Source:** `cc_vehicle.h`, `cc_vehicle.cpp`
+**Files:** `cs_dtm.cpp`, `cs_dtm.h`
 
-**Description:** Provides control and status management for AGV and RTNX vehicles. Handles vehicle pathing, scheduling, and multi-cycle operations.
-
-**Key Properties:**
-- Vehicle identification
-- Current point/location
-- Schedule status
-- Function and control function
-- Route status
-- Error handling
-
-**Usage:**
-Vehicle control integrates with MUDP protocol for communication and uses the Points class for pathing information.
-
-**Source Files:**
-- `cc_vehicle.h`
-- `cc_vehicle.cpp`
+#### Key Functions
+```cpp
+double cs_dtm_get();                    // Get current timestamp
+void   cs_dtm_fmt(double dtm, char* buf, size_t size);  // Format timestamp
+double cs_dtm_diff(double dtm1, double dtm2);           // Time difference
+```
 
 ---
 
-## cc_mudp - MUDP Protocol Communication Class
+### 5. cs_err - Error Handling Functions
 
-**Source:** `cc_mudp.h`, `cc_mudp.cpp`
+**Files:** `cs_err.cpp`, `cs_err.h`
 
-**Description:** Handles MUDP (Murata UDP) protocol communication for RTNX and AGV vehicles. Manages message formatting, transmission, and response handling.
-
-**Key Features:**
-- Message encoding/decoding
-- Multi-cycle protocol support
-- Error recovery
-- Timeout handling
-
-**Usage:**
-Used by vehicle communication processes (`p_cc_mudpcm`) to send commands and receive status from vehicles.
-
-**Source Files:**
-- `cc_mudp.h`
-- `cc_mudp.cpp`
+#### Key Functions
+```cpp
+void cs_err_set(long code, const char* msg);
+long cs_err_get();
+char* cs_err_text(long code);
+```
 
 ---
 
-## cc_plc - PLC Communication Class
+### 6. cs_elt - Elements Table Functions
 
-**Source:** `cc_plc.h`, `cc_plc.cpp`
+**Files:** `cs_elt.cpp`, `cs_elt.h`
 
-**Description:** Provides abstraction layer for PLC communication via Kepware OPC or direct protocols. Manages tag reading/writing and connection status.
-
-**Key Features:**
-- OPC tag access
-- Register/coil mapping
-- Connection management
-- Error handling
-
-**Usage:**
-Used by PLC communication processes to read/write PLC I/O points.
-
-**Source Files:**
-- `cc_plc.h`
-- `cc_plc.cpp`
+#### Key Functions
+```cpp
+long cs_elt_read(const char* key, char* value, size_t size);
+long cs_elt_read(const char* key, long* value, long default_val);
+long cs_elt_write(const char* key, const char* value);
+```
 
 ---
 
-## cc_sys - System Control Class
+### 7. cs_txt - Text Translation Functions
 
-**Source:** `cc_sys.h`, `cc_sys.cpp`
+**Files:** `cs_txt.cpp`, `CS_TXT.H`
 
-**Description:** Provides system-wide control and status management. Handles warm start, system state, and global configuration.
-
-**Key Features:**
-- System initialization
-- Warm start coordination
-- Global state management
-- Error tracking
-
-**Source Files:**
-- `cc_sys.h`
-- `cc_sys.cpp`
+#### Key Functions
+```cpp
+char* cs_txt_get(long code);            // Get text for code
+char* cs_txt_get(const char* key);      // Get text by key
+```
 
 ---
 
-## cc_mem - Mapped Memory Management Class
+### 8. cs_sem - Semaphore Functions
 
-**Source:** `cc_mem.h`, `cc_mem.cpp`
+**Files:** `CS_SEM.Cpp`, `CS_SEM.H`
 
-**Description:** Manages memory-mapped files for inter-process communication. Provides access to shared memory structures.
-
-**Key Features:**
-- Memory mapping
-- Shared memory access
-- File persistence
-- Synchronization
-
-**Usage:**
-Used extensively for real-time data sharing between MEM processes.
-
-**Source Files:**
-- `cc_mem.h`
-- `cc_mem.cpp`
+#### Key Functions
+```cpp
+long cs_sem_create(const char* name);
+long cs_sem_lock(const char* name);
+long cs_sem_unlock(const char* name);
+void cs_sem_cleanup(const char* prefix);
+```
 
 ---
 
-## Additional CCSUB Classes
+### 9. cs_mpm - Mapped Memory Functions
 
-- `cc_gg`: Global globals and system-wide variables
-- `cc_prc`: Process management
-- `cc_route`: Routing and pathing
-- `cc_server`: Thick server communication
-- `cc_tim`: Timing utilities
-- `cc_coms`: Communication utilities
-- `cc_std`: Standard utilities
+**Files:** `cs_mpm.cpp`, `cs_mpm.h`
+
+#### Key Functions
+```cpp
+void* cs_mpm_attach();
+void  cs_mpm_detach();
+void  cs_mpm_flush();
+```
 
 ---
 
-## Notes
+### 10. cs_tmr - Timer Functions
 
-1. **Static Classes:** Most CCSUB classes are implemented as static class instances (e.g., `cc_str`, `cc_stk`).
+**Files:** `cs_tmr.cpp`, `cs_tmr.h`
 
-2. **Mapped Memory:** Many classes interact with mapped memory files for real-time data access.
+#### Key Functions
+```cpp
+double cs_tmr_start();
+double cs_tmr_elapsed(double start);
+bool   cs_tmr_expired(double start, double limit);
+```
 
-3. **Thread Safety:** Classes are designed for multi-process access but may require synchronization for multi-threaded use.
+---
 
-4. **Error Handling:** Functions return standard MHC return codes (`GP.GOOD`, `GP.BAD`, etc.).
+## File Summary
+
+| Category | Files | Description |
+|----------|-------|-------------|
+| **Equipment Classes** | 14 | cc_stk, cc_std, cc_zone, cc_agv, cc_rtn, cc_plc... |
+| **Utility Classes** | 6 | cc_str, cc_gg, cc_mem, cc_sys, cc_sts, cc_route |
+| **Protocol Classes** | 4 | cc_mudp, cc_vehicle, cc_coms, cc_server |
+| **Utility Functions** | 16 | cs_log, cs_msg, cs_reg, cs_dtm, cs_err, cs_elt... |
+| **Total** | ~40 files | Complete control layer |
+
+---
+
+## Dependencies
+
+### Required Headers
+```cpp
+#include <global_prm.h>    // Global parameters
+#include <cc_gg.h>         // Global variables
+#include <cc_str.h>        // String operations (REQUIRED)
+#include <cs_log.h>        // Logging
+```
+
+---
+
+## Shared Memory Version Control
+
+Each class has a version constant that must be updated when memory layout changes:
+
+```cpp
+#define stk_version 14     // cc_stk version
+#define std_version 29     // cc_std version
+#define zone_version 9     // cc_zone version
+```
+
+**IMPORTANT:** Incrementing version invalidates existing shared memory files and forces reinitialization.
 
 ---
 
 ## Related Documentation
 
-- CSUB: `csub.md` for common subroutines
-- OSUB: `osub.md` for database access
-- Database Reference: `04_Database_Reference` for table schemas
+- [DSUB Library](dsub.md) - Database subroutines
+- [CSUB Functions](csub.md) - Additional utility functions
+- [OSUB Library](osub.md) - VB.NET database access
+- [global_prm.h Reference](global_prm.md)
+- [ICISDefines.vb Reference](ICISDefines.md)
 
+---
+
+## Cross-References
+
+| Topic | Document | Section |
+|-------|----------|---------|
+| Stacker Dispatcher | [p_ar_stkdp](../01_Background_Processes/p_ar_stkdp.md) | Uses cc_stk |
+| Move Dispatcher | [p_ar_movdp](../01_Background_Processes/p_ar_movdp.md) | Uses cc_std |
+| Stacker Communications | [p_cc_stkcmx](../01_Background_Processes/p_cc_stkcmx.md) | Uses cc_mudp |
+| Database Access | [DSUB Library](dsub.md) | ds_* functions |
+
+---
+
+## Changelog
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 2.0 | 2024-12-23 | Comprehensive deep documentation |
+| 1.0 | 2024-12-22 | Initial creation |
