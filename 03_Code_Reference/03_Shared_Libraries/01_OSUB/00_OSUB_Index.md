@@ -22,9 +22,9 @@ This directory contains individual file-level documentation for each OSUB (Opera
 | File | Table | Status | Document |
 |------|-------|--------|----------|
 | `os_movs.md` | `MHC_MOVS` | ✅ Complete | [os_movs.md](os_movs.md) |
-| `os_load.md` | `MHC_LOAD` | ❌ Pending | - |
-| `os_locn.md` | `MHC_LOCATION` | ❌ Pending | - |
-| `os_invt.md` | `MHC_INVENTORY` | ❌ Pending | - |
+| `os_load.md` | `MHC_LOAD` | ✅ Complete | [os_load.md](os_load.md) |
+| `os_locn.md` | `MHC_LOCATION` | ✅ Complete | [os_locn.md](os_locn.md) |
+| `os_invt.md` | `MHC_INVENTORY` | ✅ Complete | [os_invt.md](os_invt.md) |
 | `os_sys.md` | `MHC_SYS` | ❌ Pending | - |
 | `os_stk.md` | `MHC_STK` | ❌ Pending | - |
 | `os_sttn.md` | `MHC_STTN` | ❌ Pending | - |
@@ -120,7 +120,7 @@ Each individual file follows this structure:
 
 | Category | Total | Documented | Remaining | Progress |
 |----------|-------|------------|-----------|----------|
-| Core Tables | 7 | 1 | 6 | 14% |
+| Core Tables | 7 | 4 | 3 | 57% |
 | Supporting Tables | 8 | 0 | 8 | 0% |
 | View Tables | 6 | 0 | 6 | 0% |
 | History Tables | 6 | 0 | 6 | 0% |
