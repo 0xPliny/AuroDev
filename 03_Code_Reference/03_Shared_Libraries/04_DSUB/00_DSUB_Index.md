@@ -31,7 +31,7 @@ This directory contains individual file-level documentation for each DSUB (Datab
 
 | File | Module | Status | Document |
 |------|--------|--------|----------|
-| `ds_sql.md` | `ds_sql` | ❌ Pending | - |
+| `ds_sql.md` | `ds_sql` | ✅ Complete | [ds_sql.md](ds_sql.md) |
 
 ---
 
@@ -39,10 +39,10 @@ This directory contains individual file-level documentation for each DSUB (Datab
 
 | File | Module | Status | Document |
 |------|--------|--------|----------|
-| `ds_sys.md` | `ds_sys` | ❌ Pending | - |
-| `ds_stk.md` | `ds_stk` | ❌ Pending | - |
-| `ds_sttn.md` | `ds_sttn` | ❌ Pending | - |
-| `ds_errors.md` | `ds_errors` | ❌ Pending | - |
+| `ds_sys.md` | `ds_sys` | ✅ Complete | [ds_sys.md](ds_sys.md) |
+| `ds_stk.md` | `ds_stk` | ✅ Complete | [ds_stk.md](ds_stk.md) |
+| `ds_sttn.md` | `ds_sttn` | ✅ Complete | [ds_sttn.md](ds_sttn.md) |
+| `ds_errors.md` | `ds_errors` | ✅ Complete | [ds_errors.md](ds_errors.md) |
 
 ---
 
@@ -51,9 +51,9 @@ This directory contains individual file-level documentation for each DSUB (Datab
 | Category | Total | Documented | Pending | Progress |
 |----------|-------|------------|---------|----------|
 | Priority 1 | 5 | 5 | 0 | **100%** ✅ |
-| Priority 2 | 1 | 0 | 1 | 0% |
-| Priority 3 | 4 | 0 | 4 | 0% |
-| **Total** | **10** | **5** | **5** | **50%** |
+| Priority 2 | 1 | 1 | 0 | **100%** ✅ |
+| Priority 3 | 4 | 4 | 0 | **100%** ✅ |
+| **Total** | **10** | **10** | **0** | **100%** ✅ |
 
 ---
 
