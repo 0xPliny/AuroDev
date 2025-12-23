@@ -30,8 +30,8 @@ This directory contains individual file-level documentation for each CSUB (Commo
 
 | File | Module | Status | Document |
 |------|--------|--------|----------|
-| `cs_elt.md` | `cs_elt` | ❌ Pending | - |
-| `cs_err.md` | `cs_err` | ❌ Pending | - |
+| `cs_elt.md` | `cs_elt` | ✅ Complete | [cs_elt.md](cs_elt.md) |
+| `cs_err.md` | `cs_err` | ✅ Complete | [cs_err.md](cs_err.md) |
 
 ---
 
@@ -53,9 +53,9 @@ This directory contains individual file-level documentation for each CSUB (Commo
 | Category | Total | Documented | Pending | Progress |
 |----------|-------|------------|---------|----------|
 | Priority 1 | 4 | 4 | 0 | **100%** ✅ |
-| Priority 2 | 2 | 0 | 2 | 0% |
+| Priority 2 | 2 | 2 | 0 | **100%** ✅ |
 | Priority 3 | 6 | 0 | 6 | 0% |
-| **Total** | **12** | **4** | **8** | **33%** |
+| **Total** | **12** | **6** | **6** | **50%** |
 
 ---
 
