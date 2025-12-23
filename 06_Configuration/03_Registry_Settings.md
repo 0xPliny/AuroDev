@@ -34,7 +34,7 @@ This document describes Windows Registry settings used in the Auro System.
 ## Related Documents
 
 - [Configuration Overview](00_Configuration_Overview.md)
-- [Quick Start Guide](../00_Project_Overview/02_Quick_Start_Guide.md)
+- [Quick Start Guide](../00_Quick_Start_Guide.md)
 
 ---
 
@@ -42,7 +42,7 @@ This document describes Windows Registry settings used in the Auro System.
 
 | Topic | Document | Section |
 |-------|----------|---------|
-| Setup | [Quick Start Guide](../00_Project_Overview/02_Quick_Start_Guide.md) | Registry Setup |
+| Setup | [Quick Start Guide](../00_Quick_Start_Guide.md) | Registry Setup |
 
 ---
 

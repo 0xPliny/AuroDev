@@ -145,12 +145,12 @@ The system provides centralized control, real-time load tracking, automated disp
 
 ## Documentation Structure
 
-This documentation follows the MHC-Developers-Guide structure:
+This documentation follows the MHC-Developers-Guide structure (all at root level):
 
-- **00_Project_Overview/** - System overview and quick start
+- **00_Project_Overview/** - Executive summary and system scope
 - **01_System_Architecture/** - Architecture diagrams and component maps
 - **02_Coding_Standards/** - Coding standards and patterns
-- **03_Code_Reference/** - Detailed code documentation
+- **03_Code_Reference/** - Detailed code documentation (includes shared libraries: OSUB, CCSUB, CSUB)
 - **04_Database_Reference/** - Database schema documentation
 - **05_Workflows/** - Critical workflow traces
 - **06_Configuration/** - Configuration file documentation
@@ -162,7 +162,7 @@ This documentation follows the MHC-Developers-Guide structure:
 ## Related Documents
 
 - [System Scale and Scope](01_System_Scale_and_Scope.md)
-- [Quick Start Guide](02_Quick_Start_Guide.md)
+- [Quick Start Guide](../00_Quick_Start_Guide.md)
 - [Architecture Overview](../01_System_Architecture/00_Architecture_Overview.md)
 - [MHC-Developers-Guide](https://github.com/0xPliny/MHC-Developers-Guide) - Generic MHC patterns and standards
 

@@ -18,25 +18,28 @@ This repository contains comprehensive documentation for the **Auro System**, a 
 
 ```
 AuroDev/
-├── 00_Project_Overview/          # System overview and quick start
+├── 00_Project_Overview/          # Executive summary and system scope
 ├── 01_System_Architecture/       # Architecture diagrams and component maps
 ├── 02_Coding_Standards/          # Coding standards and patterns
 ├── 03_Code_Reference/            # Detailed code documentation
 │   ├── 01_Background_Processes/  # All background processes
 │   ├── 02_UI_Dialogs/            # All UI dialogs
-│   └── 03_Shared_Libraries/      # Shared libraries
-├── 04_Database_Reference/       # Database schema documentation
+│   └── 03_Shared_Libraries/      # OSUB, CCSUB, CSUB, ICISDefines, global_prm
+├── 04_Database_Reference/        # Database schema documentation
 ├── 05_Workflows/                 # Critical workflow traces
 ├── 06_Configuration/             # Configuration file documentation
 ├── 07_Troubleshooting/           # Troubleshooting guides
-└── 08_Project_Specific/          # Auro-specific customizations
+├── 08_Project_Specific/          # Auro-specific customizations
+├── 00_Quick_Start_Guide.md       # Getting started guide
+├── 01_System_Blueprint_Layer_2.md # System blueprint
+└── README.md                     # This file
 ```
 
 ---
 
 ## Quick Start
 
-1. **New Developers:** Start with [Quick Start Guide](00_Project_Overview/02_Quick_Start_Guide.md)
+1. **New Developers:** Start with [Quick Start Guide](00_Quick_Start_Guide.md)
 2. **Architecture:** Review [Architecture Overview](01_System_Architecture/00_Architecture_Overview.md)
 3. **Workflows:** Study [Workflow Index](05_Workflows/00_Workflow_Index.md)
 4. **Code Reference:** Use [Code Reference Index](03_Code_Reference/00_Code_Index.md)
