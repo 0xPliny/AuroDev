@@ -38,11 +38,11 @@ This directory contains individual file-level documentation for each OSUB (Opera
 | `os_ordr.md` | `MHC_ORDER` | ✅ Complete | [os_ordr.md](os_ordr.md) |
 | `os_pall.md` | `MHC_PALLET` | ✅ Complete | [os_pall.md](os_pall.md) |
 | `os_groups.md` | `MHC_GROUPS` | ✅ Complete | [os_groups.md](os_groups.md) |
-| `os_grpmem.md` | `MHC_GRPMEM` | ❌ Pending | - |
+| `os_grpmem.md` | `MHC_GRPMEM` | ✅ Complete | [os_grpmem.md](os_grpmem.md) |
 | `os_route.md` | `MHC_ROUTE` | ✅ Complete | [os_route.md](os_route.md) |
-| `os_errors.md` | `MHC_ERRORS` | ❌ Pending | - |
-| `os_errhist.md` | `MHC_ERROR_HISTORY` | ❌ Pending | - |
-| `os_stats.md` | `MHC_STATS` | ❌ Pending | - |
+| `os_errors.md` | `MHC_ERRORS` | ✅ Complete | [os_errors.md](os_errors.md) |
+| `os_errhist.md` | `MHC_ERROR_HISTORY` | ✅ Complete | [os_errhist.md](os_errhist.md) |
+| `os_stats.md` | `MHC_STATS` | ✅ Complete | [os_stats.md](os_stats.md) |
 
 ---
 
