@@ -61,11 +61,11 @@ This document provides a complete index of all background processes in the Auro 
 - [p_ar_arive](p_ar_arive.md) - Load Arrival Handler ✅
 - [p_ar_events](p_ar_events.md) - Events Handler ✅
 - [p_ar_order](p_ar_order.md) - Order Processing ✅
-- [p_ar_release](p_ar_release.md) - Releaser
-- [p_ar_shuffle](p_ar_shuffle.md) - Shuffle Operations
+- [p_ar_release](p_ar_release.md) - Release Operations ✅
+- [p_ar_shuffle](p_ar_shuffle.md) - Shuffle Operations ✅
 - [p_ar_hostcom](p_ar_hostcom.md) - Host Communications
 - [p_ar_modechange](p_ar_modechange.md) - Mode Change
-- [p_cc_hostcom](p_cc_hostcom.md) - Host Communications
+- [p_cc_hostcom](p_cc_hostcom.md) - Host Communications ✅
 
 ### Utilities
 - [p_ut_makdb](p_ut_makdb.md) - Make Database Routines
