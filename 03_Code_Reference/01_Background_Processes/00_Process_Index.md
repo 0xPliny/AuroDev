@@ -33,15 +33,16 @@ This document provides a complete index of all background processes in the Auro 
 - [Kepware_PLC](Kepware_PLC.md) - PLC Communications (VB.NET)
 
 ### System Services
-- [p_sy_dbini](p_sy_dbini.md) - Database Initialization
-- [p_sy_stats](p_sy_stats.md) - Statistics Collection
+- [p_sy_dbini](p_sy_dbini.md) - Database Initialization ✅
+- [p_sy_stats](p_sy_stats.md) - Statistics Collection ✅
+- [p_sy_sm2db](p_sy_sm2db.md) - Shared Memory to Database ✅
+- [p_sy_errdev](p_sy_errdev.md) - Error Device Monitor ✅
+- [p_sy_erlog](p_sy_erlog.md) - Error Logger ✅
 - [p_sy_emailer](p_sy_emailer.md) - Email Service
-- [p_sy_erlog](p_sy_erlog.md) - Error Logging
-- [p_sy_errdev](p_sy_errdev.md) - Error Device Monitor
 - [p_sy_watch](p_sy_watch.md) - Process Watchdog
-- [p_sy_sm2db](p_sy_sm2db.md) - Shared Memory to Database
 - [p_sy_gcini](p_sy_gcini.md) - Global Control Initialization
 - [p_sy_shmop](p_sy_shmop.md) - Shared Memory Operations
+- [p_sy_runner](p_sy_runner.md) - Process Runner
 - [p_sy_ThickServer](p_sy_ThickServer.md) - Thick Server
 
 ### Auro-Specific Services
