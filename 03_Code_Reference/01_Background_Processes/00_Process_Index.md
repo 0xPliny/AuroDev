@@ -1,9 +1,9 @@
 # Background Processes Index
 
-**Document Version:** 1.0
-**Last Updated:** 2024-12-22
-**Author:** PlinyHub HARVEST
-**Confidence Score:** 0.90
+**Document Version:** 1.1
+**Last Updated:** 2024-12-23
+**Author:** CmL
+**Confidence Score:** 0.95
 
 ---
 
@@ -57,13 +57,14 @@ This document provides a complete index of all background processes in the Auro 
 - [p_tk_tracker](p_tk_tracker.md) - Tracker
 
 ### Area Programs
-- [p_ar_arive](p_ar_arive.md) - Arrival Handler
-- [p_ar_order](p_ar_order.md) - Order Handler
+- [p_ar_alloc](p_ar_alloc.md) - Stand Allocator ✅
+- [p_ar_arive](p_ar_arive.md) - Load Arrival Handler ✅
+- [p_ar_events](p_ar_events.md) - Events Handler ✅
+- [p_ar_order](p_ar_order.md) - Order Processing ✅
 - [p_ar_release](p_ar_release.md) - Releaser
-- [p_ar_events](p_ar_events.md) - Events Handler
+- [p_ar_shuffle](p_ar_shuffle.md) - Shuffle Operations
 - [p_ar_hostcom](p_ar_hostcom.md) - Host Communications
 - [p_ar_modechange](p_ar_modechange.md) - Mode Change
-- [p_ar_alloc](p_ar_alloc.md) - Allocator
 - [p_cc_hostcom](p_cc_hostcom.md) - Host Communications
 
 ### Utilities
